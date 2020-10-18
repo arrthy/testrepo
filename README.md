@@ -27,4 +27,4 @@ This repository helps you to spin a GCP instance automatically and install & con
 ## Configuration Management [Ansible]:
 
 * Update the Ansible's inventory file with the output(Spinned up instance's IP address) from terraform execuion  [Pre-requisite]
-* Initiate the playbook execution by **ansible-playbook -i hosts playbook.yml --extra-vars="root_password=xxx wiki_password=yyy" -u <username> --private-key <path to user's private key file>**
+* Initiate the playbook execution by **ansible-playbook -i hosts playbook.yml --extra-vars="root_password=xxx wiki_password=yyy" -u <user name> --private-key <path to user's private key file>**
