@@ -1,4 +1,4 @@
-# Mediawiki on GCP
+# Mediawiki Deployment on GCP
 
 This repository helps you to spin a GCP instance automatically and install & configure Mediawiki application on it.
 
