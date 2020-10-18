@@ -1,49 +1,30 @@
-# Mediawiki
+# Mediawiki on GCP
 
-This repository contains files which will help in spinning GCP server automatically and install Mediawiki application on it.
+This repository helps you to spin a GCP instance automatically and install & configure Mediawiki application on it.
 
 ## Tools Used:
 
-* Terraform for Infrastructure setup
-* Ansible for Configuration Management
+* Infrastructure provisioning Tool -> Terraform
+* Configuration Management Tool -> Ansible
 
-## Infrastructure setup:
+## Pre-requisities:
 
-Follow the below steps to spin a CentOS instance in GCP:
+* Create a project in GCP console with a billing account attached to it.
+* Create a service account in your project, generate key for it and download the key file.
+* Install terraform and ansible in your machine from where you would want to run this setup.
+* Clone this repository in your machine.
+* Add the earlier generated key file (terraform_key.json) which contains your service account details in this cloned repository's main directory
+* Modify terraform.tfvars file as per your requirement
 
-* Clone the repository
-* Add terrform_key.json file which contains your service account details in main directory
-* Modify variable.tfvars file as per requirement
-* Initialize the Terraform working directory -- terrform init
-* View the execution plan -- terraform plan -var-file=variable.tfvars
-* Execute the changes -- terraform apply -var-file=variable.tfvars
-* The output will contain IP address of the spinned instance
+## Infrastructure Provisioning [Terraform]:
 
-
-## Configuration Management:
-
-Follow the below steps to spin a CentOS instance in GCP:
-
-* Clone the repository
-* Update the hosts file with the instance's IP address
-* Execute the playbook by ansible-playbook -i hosts playbook.yml -u <username> --private-key <path to user's private key file>
-
-## Infrastructure scalaility considerations
-
-* If you wish to create multiple GCP instances, add a variable node_count in *main.tf* file
-
-`variable "node_count" {
-  type = number
-}`
-
-* Define the variable in *variable.tfvars*
-* Modify the vm instance creation part in *vm.tf* file
-
-`resource "google_compute_instance" "vm_instance" {
-    count        = var.node_count
-    name         = "mediawiki-vm-${count.index}"`
+* Initialize the Terraform working directory -> **terrform init**
+* Generate the execution plan -> **terraform plan -out=plan.out**
+* Build the infrastructure using gnerated plan -> **terraform apply plan.out**
+* The IP address of the spinned up instance will be printed in the output after successful execution
 
 
-*In order to get the IP addresses of the multiple instances, you need to check the GCP console
-or you can declare a range of static IPs which will be assigned to the instances while creation 
-and configure locdbalaning module in terraform*
+## Configuration Management [Ansible]:
+
+* Update the Ansible's inventory file with the output(Spinned up instance's IP address) from terraform execuion  [Pre-requisite]
+* Initiate the playbook execution by **ansible-playbook -i hosts playbook.yml --extra-vars="root_password=xxx wiki_password=yyy" -u <username> --private-key <path to user's private key file>**
